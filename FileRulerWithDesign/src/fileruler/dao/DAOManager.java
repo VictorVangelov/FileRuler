@@ -39,7 +39,7 @@ public class DAOManager {
     
     public List<? extends Movie> selectSpecificRecords(String whereClause){
        
-       return movieDAO.getAllMoviesByActor(whereClause);
+       return movieDAO.getMoviesByTitle(whereClause);
     }
     
     public void closeDBConn(){

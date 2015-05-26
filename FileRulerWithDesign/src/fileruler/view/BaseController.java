@@ -1,6 +1,5 @@
 package fileruler.view;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -56,6 +55,7 @@ public class BaseController {
     public BaseController() {
         managerDAO.openDBConn();
     }
+
     @FXML
     private void initialize() {
         nameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getTitle()));
@@ -109,12 +109,18 @@ public class BaseController {
 
     private void searchHandler(String value) {
         ObservableList<Movie> movies = FXCollections.observableArrayList();
-        movies.add(MovieUtils.findMovieByName(value));
-        //managerDAO.delete();
-        managerDAO.addDataToDB(movies);
-        List<Movie> allRecords = (List<Movie>) managerDAO.selectAllRecords();
-        ObservableList<Movie> moviesObserv = FXCollections.observableArrayList(allRecords);
-        tableMovies.setItems(moviesObserv);
+        List<Movie> existingMovie = (List<Movie>) managerDAO.selectSpecificRecords(value);
+        if (!existingMovie.isEmpty()) {
+            ObservableList<Movie> existingMovieObserv = FXCollections.observableArrayList(existingMovie);
+            tableMovies.setItems(existingMovieObserv);
+        }
+        else{
+            movies.add(MovieUtils.findMovieByName(value));
+            managerDAO.addDataToDB(movies);
+            ObservableList<Movie> moviesObserv = FXCollections.observableArrayList(movies);
+            tableMovies.setItems(moviesObserv);
+        }
+        
     }
 
     @FXML
