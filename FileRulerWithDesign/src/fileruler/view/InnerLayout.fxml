@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="fileruler.view.BaseController">
+  <!-- TODO Add Nodes -->
+  <children>
+    <AnchorPane prefHeight="300.0" prefWidth="690.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-38.0" AnchorPane.rightAnchor="-28.0" AnchorPane.topAnchor="0.0">
+      <children>
+        <Label layoutX="367.0" layoutY="14.0" prefWidth="105.0" text="Details" />
+        <GridPane prefHeight="191.0" prefWidth="487.0" AnchorPane.leftAnchor="367.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="41.0">
+          <children>
+            <Label prefWidth="67.0" text="Release date" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Label id="lblReleaseDate" fx:id="releaseDateLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <Label prefWidth="89.0" text="Actors" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <Label text="Producer" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <Label text="Director" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <Label text="Genre" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+            <Label id="lblActros" fx:id="actors" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label id="lblProducer" fx:id="producer" text="" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label id="lblDirector" fx:id="director" text="" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label id="lblGenre" fx:id="genre" text="" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label text="Duration" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+            <Label text="Country" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+            <Label id="lblDuration" fx:id="duration" text="" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label id="lblCountry" fx:id="country" text="" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+          </children>
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="202.0" minWidth="10.0" prefWidth="191.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="252.0" minWidth="10.0" prefWidth="214.0" />
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints maxHeight="29.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="29.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="29.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="29.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="29.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="29.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="29.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+          </rowConstraints>
+        </GridPane>
+        <Pane layoutX="38.0" layoutY="0.0" prefHeight="486.0" prefWidth="319.0">
+          <children>
+            <TextField fx:id="textSearch" layoutX="105.0" layoutY="14.0" onInputMethodTextChanged="#textBoxOnChange" prefWidth="200.0" />
+            <ComboBox fx:id="combo" layoutX="14.0" layoutY="15.0" promptText="Type">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Item 1" />
+                  <String fx:value="Item 2" />
+                  <String fx:value="Item 3" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            <Button fx:id="buttonSearch" layoutX="249.0" layoutY="45.0" mnemonicParsing="false" onAction="#handleOnClick" text="Button" />
+            <TableView fx:id="tableMovies" layoutX="14.0" layoutY="143.0" prefHeight="343.0" prefWidth="291.0">
+              <columns>
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="138.0" text="Name" fx:id="nameColumn" />
+                <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="152.0" text="Value" fx:id="valueColumn" />
+              </columns>
+            </TableView>
+          </children>
+        </Pane>
+      </children>
+    </AnchorPane>
+  </children>
+</AnchorPane>
