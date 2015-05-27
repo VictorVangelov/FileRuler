@@ -17,7 +17,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("FileRuler");
+        this.primaryStage.setTitle("FileRuler")
         initializeLayout();
         initializeInnerLayout();
         
