@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -19,7 +20,7 @@ import fileruler.model.Movie;
 import fileruler.utils.MovieUtils;
 
 public class BaseController {
-    private DAOManager managerDAO = new DAOManager();
+    private DAOManager<Movie> managerDAO = new DAOManager<>();
     @FXML
     private Label releaseDateLabel;
     @FXML
@@ -37,7 +38,9 @@ public class BaseController {
     @FXML
     private Label country;
     @FXML
-    private GridPane grid;
+    private GridPane gridDetails;
+    @FXML
+    private GridPane gridSearchDetails;
     @FXML
     private Button buttonSearch;
     @FXML
@@ -66,7 +69,7 @@ public class BaseController {
                 .addListener((observer, oldValue, newValue) -> showMoviesDetails(newValue));
 
         ObservableList<String> itemsCombo = FXCollections.observableArrayList();
-        itemsCombo.addAll("Movies", "Songs", "Texts", "other...");
+        itemsCombo.addAll("Movies", "Texts", "Images", "Songs");
         combo.setItems(itemsCombo);
 
         combo.valueProperty().addListener((fullObject, t, selectedName) -> {
@@ -107,25 +110,59 @@ public class BaseController {
 
     }
 
-    private void searchHandler(String value) {
+    private void findMovies(String value) {
         ObservableList<Movie> movies = FXCollections.observableArrayList();
         List<Movie> existingMovie = (List<Movie>) managerDAO.selectSpecificRecords(value);
         if (!existingMovie.isEmpty()) {
             ObservableList<Movie> existingMovieObserv = FXCollections.observableArrayList(existingMovie);
             tableMovies.setItems(existingMovieObserv);
-        }
-        else{
+            hideElement(gridSearchDetails);
+            showElement(gridDetails);
+        } else {
             movies.add(MovieUtils.findMovieByName(value));
             managerDAO.addDataToDB(movies);
             ObservableList<Movie> moviesObserv = FXCollections.observableArrayList(movies);
+
+            hideElement(gridSearchDetails);
+            showElement(gridDetails);
             tableMovies.setItems(moviesObserv);
         }
-        
+    }
+
+    private void showElement(GridPane control) {
+        control.setVisible(true);
+    }
+
+    private void hideElement(GridPane control) {
+        control.setVisible(false);
+    }
+
+    private void searchHandler(String value) {
+        switch (this.searchType) {
+            case "Movies": {
+                findMovies(value);
+            }
+                break;
+            case "Texts":
+                break;
+            case "Images":
+                break;
+            case "Songs":
+                break;
+            default:
+                break;
+        }
+
     }
 
     @FXML
     private void textBoxOnChange() {
         String name = textSearch.getText();
         searchHandler(name);
+    }
+    
+    @FXML 
+    private void textOnKeyPressed(){
+        
     }
 }
