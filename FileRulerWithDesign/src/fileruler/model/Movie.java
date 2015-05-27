@@ -1,10 +1,13 @@
 package fileruler.model;
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import fileruler.utils.GenreEnum;
 
 @Entity
 public class Movie implements Serializable {
@@ -23,7 +26,38 @@ public class Movie implements Serializable {
 	private String directors;
 	private String writers;
 	private String actors;
+	private String plot;
+	private String country;
+	private String poster;
+	private String imdbRating;
+	private String imdbVotes;
+	private String filePath;
 	
+
+	public Movie() {
+		super();
+	}
+
+	public Movie(String title, String year, String released, String runtime,
+			String genres, String directors, String writers, String actors,
+			String plot, String country, String poster, String imdbRating,
+			String imdbVotes, String filePath) {
+		super();
+		this.title = title;
+		this.year = year;
+		this.released = released;
+		this.runtime = runtime;
+		this.genres = genres;
+		this.directors = directors;
+		this.writers = writers;
+		this.actors = actors;
+		this.plot = plot;
+		this.country = country;
+		this.poster = poster;
+		this.imdbRating = imdbRating;
+		this.imdbVotes = imdbVotes;
+		this.filePath = filePath;
+	}
 	public String getTitle() {
         return title;
     }
@@ -56,15 +90,17 @@ public class Movie implements Serializable {
         this.runtime = runtime;
     }
 
+    
+
     public String getGenres() {
-        return genres;
-    }
+		return genres;
+	}
 
-    public void setGenres(String genres) {
-        this.genres = genres;
-    }
+	public void setGenres(String genres) {
+		this.genres = genres;
+	}
 
-    public String getDirectors() {
+	public String getDirectors() {
         return directors;
     }
 
@@ -135,38 +171,7 @@ public class Movie implements Serializable {
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
-
-    private String plot;
-	private String country;
-	private String poster;
-	private String imdbRating;
-	private String imdbVotes;
-	private String filePath;
 	
-	public Movie() {
-		super();
-	}
-
-	public Movie(String title, String year, String released, String runtime,
-			String genres, String directors, String writers, String actors,
-			String plot, String country, String poster, String imdbRating,
-			String imdbVotes, String filePath) {
-		super();
-		this.title = title;
-		this.year = year;
-		this.released = released;
-		this.runtime = runtime;
-		this.genres = genres;
-		this.directors = directors;
-		this.writers = writers;
-		this.actors = actors;
-		this.plot = plot;
-		this.country = country;
-		this.poster = poster;
-		this.imdbRating = imdbRating;
-		this.imdbVotes = imdbVotes;
-		this.filePath = filePath;
-	}
 
 	@Override
 	public int hashCode() {

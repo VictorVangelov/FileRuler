@@ -73,24 +73,6 @@
                 <Label font="$x1" prefWidth="174.0" text="Year:" wrapText="false" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                 <Label font="$x1" prefWidth="174.0" text="Genre:" wrapText="false" GridPane.columnIndex="0" GridPane.rowIndex="3" />
                 <Label font="$x1" prefWidth="91.0" text="Title:" wrapText="false" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                <ComboBox prefHeight="21.0" prefWidth="280.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                  <items>
-                    <FXCollections fx:factory="observableArrayList">
-                      <String fx:value="Item 1" />
-                      <String fx:value="Item 2" />
-                      <String fx:value="Item 3" />
-                    </FXCollections>
-                  </items>
-                </ComboBox>
-                <ComboBox prefHeight="21.0" prefWidth="280.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                  <items>
-                    <FXCollections fx:factory="observableArrayList">
-                      <String fx:value="Item 1" />
-                      <String fx:value="Item 2" />
-                      <String fx:value="Item 3" />
-                    </FXCollections>
-                  </items>
-                </ComboBox>
                 <ComboBox prefHeight="21.0" prefWidth="140.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                   <items>
                     <FXCollections fx:factory="observableArrayList">
@@ -101,6 +83,9 @@
                   </items>
                 </ComboBox>
                 <TextField alignment="TOP_LEFT" prefWidth="160.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <TextField prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                <TextField prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
               </children>
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="235.0" minWidth="10.0" prefWidth="178.0" />

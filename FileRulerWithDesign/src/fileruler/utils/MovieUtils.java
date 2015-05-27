@@ -1,6 +1,5 @@
 package fileruler.utils;
 
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -31,6 +30,7 @@ public class MovieUtils {
 		movieName = movieName.replace(" ", "%20");
 		String movieIMDBId = findIMDBMovieId(movieName);
 		JsonObject movieJSON = JSONUtils.getJSONFromURL(IMDB_API_URL + movieIMDBId);
+		
 		return new Movie(movieJSON.get("Title").getAsString(), movieJSON.get("Year").getAsString(), movieJSON.get("Released").getAsString(),
 	    		movieJSON.get("Runtime").getAsString(), movieJSON.get("Genre").getAsString(), movieJSON.get("Director").getAsString(),
 	    		movieJSON.get("Writer").getAsString(), movieJSON.get("Actors").getAsString(), movieJSON.get("Plot").getAsString(),

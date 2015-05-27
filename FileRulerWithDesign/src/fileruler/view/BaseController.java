@@ -90,7 +90,7 @@ public class BaseController {
             this.country.setText(movie.getCountry());
             this.director.setText(movie.getDirectors());
             this.duration.setText(String.valueOf(movie.getRuntime()));
-            this.genre.setText(movie.getGenres());
+            this.genre.setText(movie.getGenres().toString());
             this.producer.setText(movie.getWriters());
             this.releaseDateLabel.setText(movie.getReleased());
         } else {

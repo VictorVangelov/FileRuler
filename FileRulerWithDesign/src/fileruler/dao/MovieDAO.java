@@ -24,7 +24,8 @@ public class MovieDAO {
 
     public List<Movie> getAllMovies() {
 
-        return em.createQuery("SELECT m FROM Movie m", Movie.class).getResultList();
+        return em.createQuery("SELECT m FROM Movie m", Movie.class)
+        		.getResultList();
     }
 
     public List<Movie> getAllMoviesByActor(String actor) {
