@@ -1,11 +1,7 @@
 package fileruler;
 
 import java.io.IOException;
-import java.util.List;
 
-import fileruler.dao.DAOManager;
-import fileruler.dao.MovieDAO;
-import fileruler.model.Movie;
 import fileruler.view.BaseController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
