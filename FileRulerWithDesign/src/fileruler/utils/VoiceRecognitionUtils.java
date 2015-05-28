@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -26,10 +28,15 @@ public class VoiceRecognitionUtils {
 		writeToFile("MovieActors.txt", movieActors);
 		Set<String> directorsWriters = movieDao.getWritersAndDirectors();
 		writeToFile("DirectorsWritersData.txt", directorsWriters);
+		Set<String> genres = new HashSet<String>();
+		for (GenreEnum string : GenreEnum.values()) {
+			genres.add(string.toString());
+		}
+		writeToFile("Genres.txt", genres);
 		
 	}
 	
-	private static void writeToFile(String filePath, Set<String> data) {
+	private static void writeToFile(String filePath, Collection<String> data) {
 		
 		try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("rsc/VoiceRecognitionData/" + filePath, false)))) {
 		    
