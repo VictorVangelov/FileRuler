@@ -25,7 +25,7 @@ public class DAOManager<T> implements DAOManagerInterface<T> {
     @Override
     public void addDataToDB(List<? extends T> collection){
         for (T movie : collection) {
-            movieDAO.add((Movie)movie);
+            movieDAO.add((Movie)movie, "/home/sdsad/movies");
         }
     }
     
