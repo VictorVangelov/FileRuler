@@ -1,10 +1,13 @@
 package fileruler.dao;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 
 import fileruler.model.Movie;
+import fileruler.utils.Splitter;
 
 public class MovieDAO {
 
@@ -15,8 +18,9 @@ public class MovieDAO {
         this.em = em;
     }
 
-    public void add(Movie movie) {
+    public void add(Movie movie, String filePath) {
 
+    	movie.setFilePath(filePath);
         em.getTransaction().begin();
         em.persist(movie);
         em.getTransaction().commit();
@@ -39,4 +43,35 @@ public class MovieDAO {
         return em.createQuery("SELECT m FROM Movie m WHERE m.title LIKE '%" + title + "%'", Movie.class)
                 .getResultList();
     }
-}
+    
+    public Set<String> getAllActors() {
+    	
+    	Set<String> set = new HashSet<String>();
+    	List<Movie> movies = getAllMovies();
+    	for (Movie movie : movies) {
+			set.addAll(Splitter.split(movie.getActors()));
+		}
+    	return set;
+    }
+    
+    public Set<String> getWritersAndDirectors() {
+    	
+    	Set<String> set = new HashSet<String>();
+    	List<Movie> movies = getAllMovies();
+    	for (Movie movie : movies) {
+			set.addAll(Splitter.split(movie.getWriters()));
+			set.addAll(Splitter.split(movie.getDirectors()));
+		}
+    	return set;
+    }
+    
+    public Set<String> getAllTitles() {
+    	
+    	Set<String> set = new HashSet<String>();
+    	List<Movie> movies = getAllMovies();
+    	for (Movie movie : movies) {
+			set.add(movie.getTitle());
+		}
+    	return set;
+    }
+} 

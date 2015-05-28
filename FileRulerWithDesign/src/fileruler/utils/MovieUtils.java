@@ -10,6 +10,7 @@ public class MovieUtils {
 
 	private static final String GOOGLE_RESPONSE_API = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=";
 	private static final String IMDB_API_URL = "http://www.omdbapi.com/?i=";
+	private static final String IMDB_API_URL_NAME = "http://www.omdbapi.com/?t=";
 	
 	private static String findIMDBMovieId(String movieName) {
 		
@@ -31,6 +32,17 @@ public class MovieUtils {
 		String movieIMDBId = findIMDBMovieId(movieName);
 		JsonObject movieJSON = JSONUtils.getJSONFromURL(IMDB_API_URL + movieIMDBId);
 		
+		return new Movie(movieJSON.get("Title").getAsString(), movieJSON.get("Year").getAsString(), movieJSON.get("Released").getAsString(),
+	    		movieJSON.get("Runtime").getAsString(), movieJSON.get("Genre").getAsString(), movieJSON.get("Director").getAsString(),
+	    		movieJSON.get("Writer").getAsString(), movieJSON.get("Actors").getAsString(), movieJSON.get("Plot").getAsString(),
+	    		movieJSON.get("Country").getAsString(), movieJSON.get("Poster").getAsString(), movieJSON.get("imdbRating").getAsString(),
+	    		movieJSON.get("imdbVotes").getAsString(), "");
+	}
+	
+	public static Movie findMovieByNameInIMDB(String movieName) {
+		
+		movieName = movieName.replace(" ", "%20");
+		JsonObject movieJSON = JSONUtils.getJSONFromURL(IMDB_API_URL_NAME + movieName);
 		return new Movie(movieJSON.get("Title").getAsString(), movieJSON.get("Year").getAsString(), movieJSON.get("Released").getAsString(),
 	    		movieJSON.get("Runtime").getAsString(), movieJSON.get("Genre").getAsString(), movieJSON.get("Director").getAsString(),
 	    		movieJSON.get("Writer").getAsString(), movieJSON.get("Actors").getAsString(), movieJSON.get("Plot").getAsString(),
