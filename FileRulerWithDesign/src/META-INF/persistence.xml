@@ -8,6 +8,7 @@
  
 		<!-- change here if your class/Entity package different -->
 		<class>fileruler.model.Movie</class>
+		<class>fileruler.model.Song</class>
  
 		<properties>
 			<!-- <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" /> -->
