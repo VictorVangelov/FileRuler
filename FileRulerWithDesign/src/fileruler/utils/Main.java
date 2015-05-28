@@ -3,7 +3,6 @@ package fileruler.utils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -63,23 +62,6 @@ private static String PERSISTENCE_UNIT_NAME = "movies";
 			System.out.println(movie);
 		}
 		
-		System.out.println("All actors:");
-		Set<String> actors = movieDAO.getAllActors();
-		for (String string : actors) {
-			System.out.println(string);
-		}
-		
-		System.out.println("All directorsWriters:");
-		Set<String> directorsWriters = movieDAO.getWritersAndDirectors();
-		for (String string : directorsWriters) {
-			System.out.println(string);
-		}
-		
-		System.out.println("All Titles:");
-		Set<String> titles = movieDAO.getAllTitles();
-		for (String string : titles) {
-			System.out.println(string);
-		}
-		
+		VoiceRecognitionUtils.setMoviesData();
 	}
 }

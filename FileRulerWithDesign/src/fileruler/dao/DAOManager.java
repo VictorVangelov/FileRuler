@@ -51,4 +51,6 @@ public class DAOManager<T> implements DAOManagerInterface<T> {
     public void closeDBConn(){
         em.close();
     }
+    
+    
 }

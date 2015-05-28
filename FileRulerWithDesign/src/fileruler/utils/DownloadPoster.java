@@ -9,8 +9,6 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import fileruler.model.Movie;
-
 public class DownloadPoster {
 
 	public static String download(String title, String posterUrl) {
