@@ -39,7 +39,7 @@ public class MovieUtils {
 	    		movieJSON.get("imdbVotes").getAsString(), "");
 	}
 	
-	public static Movie findMovieByNameInIMDB(String movieName) {
+	public static synchronized Movie findMovieByNameInIMDB(String movieName) {
 		
 		movieName = movieName.replace(" ", "%20");
 		JsonObject movieJSON = JSONUtils.getJSONFromURL(IMDB_API_URL_NAME + movieName);

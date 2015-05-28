@@ -1,7 +1,11 @@
 package fileruler.view;
 
+import java.awt.Desktop;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -59,6 +63,8 @@ public class BaseController {
     private int startPositionImageY = 14;
 
     private int paneMaxImagesCount = 400;
+    
+    private Map<ImageViewCustom, Label> imagesDynamicallyCreated = new HashMap<>();
 
     @FXML
     private Pane imagePane;
@@ -131,7 +137,8 @@ public class BaseController {
         imageView.setX(x);
         imageView.setY(y);
         imageView.setVisible(true);
-        Label lblItem = new Label(labelText);
+        Label lblItem = new Label("");
+        lblItem.setText(imageSource.getTitle());
         lblItem.setLayoutX(x + 10);
         lblItem.setLayoutY(100 + y);
         lblItem.setVisible(true);
@@ -142,49 +149,41 @@ public class BaseController {
             showElement(gridDetails);
             showMoviesDetails(imageView.getMovieSource());
         });
+        imageView.setOnMouseClicked(event -> {
+            showElement(gridDetails);
+            hideElement(gridSearchDetails);
+            try {
+                Desktop.getDesktop().open(new File("D:\\Movies\\Family.Guy.S01-S12.DVDRip\\Season.09\\family.guy.s09e01.and.then.there.were.fewer.dvdrip.xvid-reward.avi"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            
+        });
         imageView.setOnMouseExited(event -> {
             showElement(gridSearchDetails);
             hideElement(gridDetails);
             showMoviesDetails(null);
         });
+        
+        imagesDynamicallyCreated.put(imageView, lblItem);
     }
 
     private void findMovies(String value) {
         ObservableList<Movie> movies = FXCollections.observableArrayList();
-        // List<Movie> existingMovie = (List<Movie>)
-        // managerDAO.selectSpecificRecords(value);
-        for (int i = 0; i < 40; i++) {
-            Movie m = new Movie("Hdha", "Hdha", "Hdha", "Hdha", "Hdha", "Hdha", "Hdha", "Hdha", "Hdha", "Hdha", "Hdha",
-                    "Hdha", "Hdha", "Hdha");
-            addItemsToScene(posterURL + "Focus.jpg", "test", startPositionImageX, startPositionImageY, m);
-            startPositionImageX += 100;
-            if (startPositionImageX >= paneMaxImagesCount) {
-                startPositionImageY += 100;
-                startPositionImageX = 0;
+        List<Movie> existingMovie = (List<Movie>) managerDAO.selectSpecificRecords(value);
+        if (!existingMovie.isEmpty()) {
+            ObservableList<Movie> existingMovieObserv = FXCollections.observableArrayList(existingMovie);
+            for (Movie movie : existingMovieObserv) {
+                addItemsToScene(posterURL + "Focus.jpg", "test", startPositionImageX, startPositionImageY, movie);
+            }
+        } else {
+            movies.add(MovieUtils.findMovieByName(value));
+            managerDAO.addDataToDB(movies);
+            ObservableList<Movie> moviesObserv = FXCollections.observableArrayList(movies);
+            for (Movie movie : moviesObserv) {
+                addItemsToScene(posterURL + "Focus"+".jpg", "test", startPositionImageX, startPositionImageY, movie);
             }
         }
-
-        // Movie m1 = new Movie("test", "test", "test", "test", "test", "test",
-        // "test", "test", "test", "test", "test",
-        // "test", "test", "test");
-        // addItemsToScene(posterURL + "Focus.jpg", "test2",
-        // startPositionImageX, 14,m1);
-        // if (!existingMovie.isEmpty()) {
-        // ObservableList<Movie> existingMovieObserv =
-        // FXCollections.observableArrayList(existingMovie);
-        // tableMovies.setItems(existingMovieObserv);
-        // hideElement(gridSearchDetails);
-        // showElement(gridDetails);
-        // } else {
-        // movies.add(MovieUtils.findMovieByName(value));
-        // managerDAO.addDataToDB(movies);
-        // ObservableList<Movie> moviesObserv =
-        // FXCollections.observableArrayList(movies);
-        //
-        // hideElement(gridSearchDetails);
-        // showElement(gridDetails);
-        // tableMovies.setItems(moviesObserv);
-        // }
     }
 
     private void showElement(GridPane control) {
@@ -196,6 +195,7 @@ public class BaseController {
     }
 
     private void searchHandler(String value) {
+        
         switch (this.searchType) {
             case "Movies": {
                 findMovies(value);
@@ -229,5 +229,9 @@ public class BaseController {
         hideElement(gridDetails);
         showElement(gridSearchDetails);
         showMoviesDetails(null);
+        for (Entry<ImageViewCustom, Label> entryImage : this.imagesDynamicallyCreated.entrySet()) {
+            entryImage.getKey().setVisible(false);
+            entryImage.getValue().setVisible(false);
+        }
     }
 }
