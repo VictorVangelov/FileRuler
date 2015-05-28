@@ -13,13 +13,15 @@ import fileruler.model.Movie;
 
 public class DownloadPoster {
 
-	public static void download(Movie movie) {
+	public static String download(String title, String posterUrl) {
 		
 		URL url;
+		String result = new String();
 		try {
-			url = new URL(movie.getPoster());
+			result = "rsc/posters/" + title + ".jpg";
+			url = new URL(posterUrl);
 			InputStream in = new BufferedInputStream(url.openStream());
-			OutputStream out = new BufferedOutputStream(new FileOutputStream("rsc/posters/" + movie.getTitle() + ".jpg"));
+			OutputStream out = new BufferedOutputStream(new FileOutputStream(result));
 
 			for ( int i; (i = in.read()) != -1; ) {
 			    out.write(i);
@@ -33,6 +35,7 @@ public class DownloadPoster {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return result;
 		
 	}
 }

@@ -35,7 +35,7 @@ public class MovieUtils {
 		return new Movie(movieJSON.get("Title").getAsString(), movieJSON.get("Year").getAsString(), movieJSON.get("Released").getAsString(),
 	    		movieJSON.get("Runtime").getAsString(), movieJSON.get("Genre").getAsString(), movieJSON.get("Director").getAsString(),
 	    		movieJSON.get("Writer").getAsString(), movieJSON.get("Actors").getAsString(), movieJSON.get("Plot").getAsString(),
-	    		movieJSON.get("Country").getAsString(), movieJSON.get("Poster").getAsString(), movieJSON.get("imdbRating").getAsString(),
+	    		movieJSON.get("Country").getAsString(), movieJSON.get("imdbRating").getAsString(),
 	    		movieJSON.get("imdbVotes").getAsString(), "");
 	}
 	
@@ -43,10 +43,12 @@ public class MovieUtils {
 		
 		movieName = movieName.replace(" ", "%20");
 		JsonObject movieJSON = JSONUtils.getJSONFromURL(IMDB_API_URL_NAME + movieName);
+		System.out.println(movieJSON.get("Title").getAsString());
+		DownloadPoster.download(movieJSON.get("Title").getAsString(), movieJSON.get("Poster").getAsString());
 		return new Movie(movieJSON.get("Title").getAsString(), movieJSON.get("Year").getAsString(), movieJSON.get("Released").getAsString(),
 	    		movieJSON.get("Runtime").getAsString(), movieJSON.get("Genre").getAsString(), movieJSON.get("Director").getAsString(),
 	    		movieJSON.get("Writer").getAsString(), movieJSON.get("Actors").getAsString(), movieJSON.get("Plot").getAsString(),
-	    		movieJSON.get("Country").getAsString(), movieJSON.get("Poster").getAsString(), movieJSON.get("imdbRating").getAsString(),
+	    		movieJSON.get("Country").getAsString(), movieJSON.get("imdbRating").getAsString(),
 	    		movieJSON.get("imdbVotes").getAsString(), "");
 	}
 }
