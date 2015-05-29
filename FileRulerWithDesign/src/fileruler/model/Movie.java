@@ -1,13 +1,11 @@
 package fileruler.model;
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import fileruler.utils.GenreEnum;
 
 @Entity
 public class Movie implements Serializable {
