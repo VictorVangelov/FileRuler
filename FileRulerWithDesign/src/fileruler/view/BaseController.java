@@ -36,7 +36,7 @@ public class BaseController {
     private final String luceneURLImagesIndexDir = "rsc/lucene/images/indexDIR";
     private final String luceneURLImages = "rsc/lucene/images";
     private final String luceneURLTextsIndexDIR = "rsc/lucene/texts/indexDIR";
-    private final String luceneURLITexts = "rsc/lucene/images";
+    private final String luceneURLITexts = "D:\\FileRulersearch";
     @FXML
     private Label releaseDateLabel;
     @FXML
@@ -288,8 +288,7 @@ public class BaseController {
                     hideAllElements(gridSearchDetails, gridDetails, songGridSearchDetails);
                     try {
                         Desktop.getDesktop()
-                                .open(new File(
-                                        "D:\\Movies\\Family.Guy.S01-S12.DVDRip\\Season.09\\family.guy.s09e01.and.then.there.were.fewer.dvdrip.xvid-reward.avi"));
+                                .open(new File(((Song)imageSource).getFilePath()));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -419,6 +418,7 @@ public class BaseController {
     }
 
     private void findTexts(String value) {
+        initDynamicImgLocations();
         LuceneTester luceneGOD = new LuceneTester(luceneURLTextsIndexDIR, luceneURLITexts);
         try {
             luceneGOD.createIndex();
@@ -433,8 +433,8 @@ public class BaseController {
         ObservableList<Song> songs = FXCollections.observableArrayList();
         SongDAO sDAO = new SongDAO(managerDAO.getManager());
         // Need fixes...
-        // Song searchSong = sDAO.findSongByTitle(value);
-        Song searchSong = new Song("Test", "Test", "Test", "Test", "Test", "Test");
+         Song searchSong = sDAO.findSongByTitle(value);
+        //Song searchSong = new Song("Test", "Test", "Test", "Test", "Test", "Test");
         if (searchSong != null) {
             addSongsToScene(posterURL + searchSong.getTitle() + ".jpg", searchSong.getTitle(), startPositionImageX,
                     startPositionImageY, searchSong);
