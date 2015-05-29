@@ -1,8 +1,11 @@
 package fileruler.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import fileruler.model.Song;
+import fileruler.utils.DownloadPoster;
 
 public class SongDAO {
 
@@ -12,9 +15,10 @@ public class SongDAO {
 		this.em = em;
 	}
 	
-	public void add(Song song, String filePath) {
+	public void add(Song song) {
 		
-		song.setFilePath(filePath);
+		DownloadPoster.download(song.getTitle(), song.getPoster());
+		song.setPoster("rsc/posters/" + song.getTitle() + ".jpg");
 		em.getTransaction().begin();
 		em.persist(song);
 		em.getTransaction().commit();
@@ -22,8 +26,13 @@ public class SongDAO {
 	
 	public Song findSongByTitle(String title) {
 		
-		return em.createQuery("SELECT s FROM Song s WHERE s.title = :title", Song.class)
+		return em.createQuery("SELECT s FROM Song s WHERE s.title LIKE '%" + title + "%'", Song.class)
 				.getSingleResult();
+	}
+	
+	public List<Song> getAllSongs() {
+		
+		return em.createQuery("SELECT s FROM Song s", Song.class).getResultList();
 	}
 	
 }

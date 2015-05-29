@@ -31,7 +31,7 @@ public class Song implements Serializable{
 	
 	
 	public Song(String title, String author, String album, String genre,
-			String length, String poster) {
+			String length, String poster, String filePath) {
 		super();
 		this.title = title;
 		this.author = author;
@@ -39,10 +39,9 @@ public class Song implements Serializable{
 		this.genre = genre;
 		this.length = length;
 		this.poster = poster;
+		this.filePath = filePath;
 	}
 
-
-	
 	public String getPoster() {
 		return poster;
 	}
@@ -128,10 +127,8 @@ public class Song implements Serializable{
 	public String toString() {
 		return "Song [id=" + id + ", title=" + title + ", author=" + author
 				+ ", album=" + album + ", genre=" + genre + ", length="
-				+ length + ", filePath=" + filePath + "]";
+				+ length + ", poster=" + poster + ", filePath=" + filePath
+				+ "]";
 	}
-	
-	
-	
 	
 }

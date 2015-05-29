@@ -36,7 +36,7 @@ public class MovieUtils {
 	    		movieJSON.get("Runtime").getAsString(), movieJSON.get("Genre").getAsString(), movieJSON.get("Director").getAsString(),
 	    		movieJSON.get("Writer").getAsString(), movieJSON.get("Actors").getAsString(), movieJSON.get("Plot").getAsString(),
 	    		movieJSON.get("Country").getAsString(), movieJSON.get("imdbRating").getAsString(),
-	    		movieJSON.get("imdbVotes").getAsString(), "");
+	    		movieJSON.get("imdbVotes").getAsString());
 	}
 	
 	public static synchronized Movie findMovieByNameInIMDB(String movieName) {
@@ -45,11 +45,14 @@ public class MovieUtils {
 		JsonObject movieJSON = JSONUtils.getJSONFromURL(IMDB_API_URL_NAME + movieName);
 		System.out.println(movieJSON.get("Title").getAsString());
 		DownloadPoster.download(movieJSON.get("Title").getAsString(), movieJSON.get("Poster").getAsString());
-		return new Movie(movieJSON.get("Title").getAsString(), movieJSON.get("Year").getAsString(), movieJSON.get("Released").getAsString(),
+		
+		Movie movie = new Movie(movieJSON.get("Title").getAsString(), movieJSON.get("Year").getAsString(), movieJSON.get("Released").getAsString(),
 	    		movieJSON.get("Runtime").getAsString(), movieJSON.get("Genre").getAsString(), movieJSON.get("Director").getAsString(),
 	    		movieJSON.get("Writer").getAsString(), movieJSON.get("Actors").getAsString(), movieJSON.get("Plot").getAsString(),
 	    		movieJSON.get("Country").getAsString(), movieJSON.get("imdbRating").getAsString(),
-	    		movieJSON.get("imdbVotes").getAsString(), "");
+	    		movieJSON.get("imdbVotes").getAsString());
+		movie.setPoster("rsc/posters/" + movie.getTitle() + ".jpg");
+		return movie;
 	}
 }
 

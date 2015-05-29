@@ -28,6 +28,7 @@ public class Movie implements Serializable {
 	private String country;
 	private String imdbRating;
 	private String imdbVotes;
+	private String poster;
 	private String filePath;
 	
 
@@ -38,7 +39,7 @@ public class Movie implements Serializable {
 	public Movie(String title, String year, String released, String runtime,
 			String genres, String directors, String writers, String actors,
 			String plot, String country, String imdbRating,
-			String imdbVotes, String filePath) {
+			String imdbVotes) {
 		super();
 		this.title = title;
 		this.year = year;
@@ -52,8 +53,25 @@ public class Movie implements Serializable {
 		this.country = country;
 		this.imdbRating = imdbRating;
 		this.imdbVotes = imdbVotes;
-		this.filePath = filePath;
 	}
+	
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getPoster() {
+		return poster;
+	}
+
+	public void setPoster(String poster) {
+		this.poster = poster;
+	}
+
 	public String getTitle() {
         return title;
     }
@@ -192,10 +210,12 @@ public class Movie implements Serializable {
 				+ ", released=" + released + ", runtime=" + runtime
 				+ ", genres=" + genres + ", directors=" + directors
 				+ ", writers=" + writers + ", actors=" + actors + ", plot="
-				+ plot + ", country=" + country
-				+ ", imdbRating=" + imdbRating + ", imdbVotes=" + imdbVotes
+				+ plot + ", country=" + country + ", imdbRating=" + imdbRating
+				+ ", imdbVotes=" + imdbVotes + ", poster=" + poster
 				+ ", filePath=" + filePath + "]";
 	}
+
+	
 	
 	
 }
