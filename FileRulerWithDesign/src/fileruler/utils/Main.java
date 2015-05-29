@@ -77,5 +77,7 @@ private static String PERSISTENCE_UNIT_NAME = "movies";
 		}
 		VoiceRecognitionUtils.setMoviesData();
 		
+		System.out.println(FileUtils.encode("C:\\ProgramFiles\\SomeDocs\\myInfo.txt"));
+		System.out.println(FileUtils.decode(FileUtils.encode("C:\\ProgramFiles\\SomeDocs\\myInfo.txt")));
 	}
 }

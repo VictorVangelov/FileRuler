@@ -27,7 +27,6 @@ public class SongDAO {
 	public Song findSongByTitle(String title) {
 		
 		return em.createQuery("SELECT s FROM Song s WHERE s.title LIKE '%" + title + "%'", Song.class)
-				.setParameter("title", title)
 				.getSingleResult();
 	}
 	
