@@ -14,7 +14,9 @@ public class DAOManager<T> implements DAOManagerInterface<T> {
     private static EntityManagerFactory factory;
     private EntityManager em;
     private MovieDAO movieDAO ;
-
+    public EntityManager getManager(){
+        return this.em;
+    }
     @Override
     public void openDBConn() {
         factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);

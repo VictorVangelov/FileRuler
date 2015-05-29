@@ -1,20 +1,19 @@
 package fileruler.view;
 
 import javafx.scene.image.ImageView;
-import fileruler.model.Movie;
 
-public class ImageViewCustom extends ImageView {
-    private Movie movieSource;
+public class ImageViewCustom<T> extends ImageView {
+    private T source;
     
-    public ImageViewCustom(Movie movie) {
-        this.movieSource = movie;
+    public ImageViewCustom(T source) {
+        this.source = source;
     }
     
-    public Movie getMovieSource(){
-        return this.movieSource;
+    public T getMovieSource(){
+        return this.source;
     }
     
-    public void setMovieSource(Movie m){
-        this.movieSource = m;
+    public void setMovieSource(T source){
+        this.source = source;
     }
 }

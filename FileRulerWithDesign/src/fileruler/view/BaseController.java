@@ -7,22 +7,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import fileruler.Main;
 import fileruler.dao.DAOManager;
+import fileruler.dao.SongDAO;
 import fileruler.model.Movie;
+import fileruler.model.Song;
 import fileruler.utils.MovieUtils;
 
 public class BaseController {
@@ -48,22 +49,37 @@ public class BaseController {
     private GridPane gridDetails;
     @FXML
     private GridPane gridSearchDetails;
+
+    @FXML
+    private GridPane songGridDetails;
+
+    @FXML
+    private GridPane songGridSearchDetails;
+
+    private GridPane selectedGridPane;
+
     @FXML
     private Button buttonSearch;
     @FXML
-    private TableView<Movie> tableMovies;
-    @FXML
-    private TableColumn<Movie, String> nameColumn;
-    @FXML
-    private TableColumn<Movie, String> valueColumn;
-    @FXML
     private ComboBox<String> combo;
+    @FXML
+    private Label songTitle;
+    @FXML
+    private Label songAthor;
+    @FXML
+    private Label songAlbum;
 
-    private int startPositionImageX = 0;
+    @FXML
+    private Label songGenre;
+
+    @FXML
+    private Label songLength;
+
+    private int startPositionImageX = 14;
     private int startPositionImageY = 14;
 
     private int paneMaxImagesCount = 400;
-    
+
     private Map<ImageViewCustom, Label> imagesDynamicallyCreated = new HashMap<>();
 
     @FXML
@@ -78,13 +94,7 @@ public class BaseController {
 
     @FXML
     private void initialize() {
-        nameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getTitle()));
-        valueColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDirectors()));
         showMoviesDetails(null);
-
-        tableMovies.getSelectionModel().selectedItemProperty()
-                .addListener((observer, oldValue, newValue) -> showMoviesDetails(newValue));
-
         ObservableList<String> itemsCombo = FXCollections.observableArrayList();
         itemsCombo.addAll(SearchTypeEnum.Movies.name(), SearchTypeEnum.Texts.name(), SearchTypeEnum.Images.name(),
                 SearchTypeEnum.Songs.name());
@@ -92,7 +102,28 @@ public class BaseController {
 
         combo.valueProperty().addListener((fullObject, t, selectedName) -> {
             this.searchType = selectedName;
+            switch (this.searchType) {
+                case "Movies": {
+                    selectedGridPane = gridSearchDetails;
+                    showElement(gridSearchDetails);
+                    hideAllElements(songGridSearchDetails, songGridDetails, gridDetails);
+                }
+                    break;
+                case "Texts":
+                    break;
+                case "Images":
+                    break;
+                case "Songs": {
+                    selectedGridPane = songGridSearchDetails;
+                    showElement(songGridSearchDetails);
+                    hideAllElements(gridSearchDetails, songGridDetails, gridDetails);
+                }
+                    break;
+                default:
+                    break;
+            }
         });
+
     }
 
     public void setMainApp(Main mainApp) {
@@ -121,6 +152,23 @@ public class BaseController {
         }
     }
 
+    private void showSongsDetails(Song song) {
+        if (song != null) {
+            this.songTitle.setText(song.getTitle());
+            this.songLength.setText(song.getLength());
+            this.songAlbum.setText(song.getAlbum());
+            this.songAthor.setText(song.getAuthor());
+            this.songGenre.setText(song.getGenre());
+        }
+        else{
+            this.songTitle.setText("");
+            this.songLength.setText("");
+            this.songAlbum.setText("");
+            this.songAthor.setText("");
+            this.songGenre.setText("");
+        }
+    }
+
     @FXML
     private void handleOnClick() {
         String name = textSearch.getText();
@@ -128,9 +176,8 @@ public class BaseController {
 
     }
 
-    private void addItemsToScene(String URL, String labelText, double x, double y, Movie imageSource) {
-
-        ImageViewCustom imageView = new ImageViewCustom(imageSource);
+    private <T> void addSongsToScene(String URL, String labelText, double x, double y, T imageSource) {
+        ImageViewCustom<T> imageView = new ImageViewCustom<>(imageSource);
         File file = new File(URL);
         Image image = new Image(file.toURI().toString(), 78, 79, false, false);
         imageView.setImage(image);
@@ -138,33 +185,78 @@ public class BaseController {
         imageView.setY(y);
         imageView.setVisible(true);
         Label lblItem = new Label("");
-        lblItem.setText(imageSource.getTitle());
+        lblItem.setText(((Song) imageSource).getTitle());
         lblItem.setLayoutX(x + 10);
         lblItem.setLayoutY(100 + y);
         lblItem.setVisible(true);
         imagePane.getChildren().add(imageView);
         imagePane.getChildren().add(lblItem);
         imageView.setOnMouseEntered(event -> {
-            hideElement(gridSearchDetails);
-            showElement(gridDetails);
-            showMoviesDetails(imageView.getMovieSource());
+            hideAllElements(gridSearchDetails, gridDetails, songGridSearchDetails);
+            showElement(songGridDetails);
+            showSongsDetails((Song) imageView.getMovieSource());
         });
-        imageView.setOnMouseClicked(event -> {
-            showElement(gridDetails);
-            hideElement(gridSearchDetails);
-            try {
-                Desktop.getDesktop().open(new File("D:\\Movies\\Family.Guy.S01-S12.DVDRip\\Season.09\\family.guy.s09e01.and.then.there.were.fewer.dvdrip.xvid-reward.avi"));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            
+        imageView
+                .setOnMouseClicked(event -> {
+                    showElement(songGridDetails);
+                    hideAllElements(gridSearchDetails, gridDetails, songGridSearchDetails);
+                    try {
+                        Desktop.getDesktop()
+                                .open(new File(
+                                        "D:\\Movies\\Family.Guy.S01-S12.DVDRip\\Season.09\\family.guy.s09e01.and.then.there.were.fewer.dvdrip.xvid-reward.avi"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                });
+        imageView.setOnMouseExited(event -> {
+            showElement(songGridSearchDetails);
+            hideAllElements(gridDetails, songGridDetails, gridSearchDetails);
+            showSongsDetails(null);
         });
+
+        imagesDynamicallyCreated.put(imageView, lblItem);
+    }
+
+    private <T> void addItemsToScene(String URL, String labelText, double x, double y, T imageSource) {
+        ImageViewCustom<T> imageView = new ImageViewCustom<>(imageSource);
+        File file = new File(URL);
+        Image image = new Image(file.toURI().toString(), 78, 79, false, false);
+        imageView.setImage(image);
+        imageView.setX(x);
+        imageView.setY(y);
+        imageView.setVisible(true);
+        Label lblItem = new Label("");
+        lblItem.setText(((Movie) imageSource).getTitle());
+        lblItem.setLayoutX(x + 10);
+        lblItem.setLayoutY(100 + y);
+        lblItem.setVisible(true);
+        imagePane.getChildren().add(imageView);
+        imagePane.getChildren().add(lblItem);
+        imageView.setOnMouseEntered(event -> {
+            hideAllElements(gridSearchDetails, songGridDetails, songGridSearchDetails);
+            showElement(gridDetails);
+            showMoviesDetails((Movie) imageView.getMovieSource());
+        });
+        imageView
+                .setOnMouseClicked(event -> {
+                    showElement(gridDetails);
+                    hideAllElements(gridSearchDetails, songGridDetails, songGridSearchDetails);
+                    try {
+                        Desktop.getDesktop()
+                                .open(new File(
+                                        "D:\\Movies\\Family.Guy.S01-S12.DVDRip\\Season.09\\family.guy.s09e01.and.then.there.were.fewer.dvdrip.xvid-reward.avi"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                });
         imageView.setOnMouseExited(event -> {
             showElement(gridSearchDetails);
-            hideElement(gridDetails);
+            hideAllElements(gridDetails, songGridDetails, songGridSearchDetails);
             showMoviesDetails(null);
         });
-        
+
         imagesDynamicallyCreated.put(imageView, lblItem);
     }
 
@@ -174,14 +266,16 @@ public class BaseController {
         if (!existingMovie.isEmpty()) {
             ObservableList<Movie> existingMovieObserv = FXCollections.observableArrayList(existingMovie);
             for (Movie movie : existingMovieObserv) {
-                addItemsToScene(posterURL + "Focus.jpg", "test", startPositionImageX, startPositionImageY, movie);
+                addItemsToScene(posterURL + movie.getTitle() + ".jpg", "test", startPositionImageX,
+                        startPositionImageY, movie);
             }
         } else {
             movies.add(MovieUtils.findMovieByName(value));
             managerDAO.addDataToDB(movies);
             ObservableList<Movie> moviesObserv = FXCollections.observableArrayList(movies);
             for (Movie movie : moviesObserv) {
-                addItemsToScene(posterURL + "Focus"+".jpg", "test", startPositionImageX, startPositionImageY, movie);
+                addItemsToScene(posterURL + movie.getTitle() + ".jpg", "test", startPositionImageX,
+                        startPositionImageY, movie);
             }
         }
     }
@@ -190,12 +284,24 @@ public class BaseController {
         control.setVisible(true);
     }
 
+    private void showAllElements(Node... controls) {
+        for (int i = 0; i < controls.length; i++) {
+            controls[i].setVisible(true);
+        }
+    }
+
+    private void hideAllElements(Node... controls) {
+        for (int i = 0; i < controls.length; i++) {
+            controls[i].setVisible(false);
+        }
+    }
+
     private void hideElement(GridPane control) {
         control.setVisible(false);
     }
 
     private void searchHandler(String value) {
-        
+
         switch (this.searchType) {
             case "Movies": {
                 findMovies(value);
@@ -205,12 +311,25 @@ public class BaseController {
                 break;
             case "Images":
                 break;
-            case "Songs":
+            case "Songs": {
+                findSong(value);
+            }
                 break;
             default:
                 break;
         }
 
+    }
+
+    private void findSong(String value) {
+        ObservableList<Song> songs = FXCollections.observableArrayList();
+        SongDAO sDAO = new SongDAO(managerDAO.getManager());
+        //Song searchSong = sDAO.findSongByTitle(value);
+        Song searchSong = new Song("Test","Test","Test","Test","Test","Test");
+        if (searchSong != null) {
+            
+            addSongsToScene(posterURL+"Not Afraid"+".jpg", searchSong.getTitle(), startPositionImageX,startPositionImageY, searchSong);
+        }
     }
 
     @FXML
@@ -226,8 +345,26 @@ public class BaseController {
 
     @FXML
     private void textBoxOnMouseClicked() {
-        hideElement(gridDetails);
-        showElement(gridSearchDetails);
+        switch (this.searchType) {
+            case "Movies": {
+                selectedGridPane = gridSearchDetails;
+                showElement(gridSearchDetails);
+                hideAllElements(songGridSearchDetails, songGridDetails, gridDetails);
+            }
+                break;
+            case "Texts":
+                break;
+            case "Images":
+                break;
+            case "Songs": {
+                selectedGridPane = songGridSearchDetails;
+                showElement(songGridSearchDetails);
+                hideAllElements(gridSearchDetails, songGridDetails, gridDetails);
+            }
+                break;
+            default:
+                break;
+        }
         showMoviesDetails(null);
         for (Entry<ImageViewCustom, Label> entryImage : this.imagesDynamicallyCreated.entrySet()) {
             entryImage.getKey().setVisible(false);
