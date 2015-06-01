@@ -76,10 +76,17 @@ private static String PERSISTENCE_UNIT_NAME = "movies";
 			System.out.println(song2);
 		}
 		VoiceRecognitionUtils.setMoviesData();
+<<<<<<< HEAD
 		String search = "Fast Five Vin Diesel";
 		System.out.println(movieDAO.getMovies(search));
+=======
+		
+		System.out.println("Test:");
+		
+>>>>>>> 5da40df446dbe8c7a1b3a9dde18c143cdb835032
 		System.out.println(FileUtils.encode("C:\\ProgramFiles\\SomeDocs\\myInfo.txt"));
 		System.out.println(FileUtils.decode(FileUtils.encode("C:\\ProgramFiles\\SomeDocs\\myInfo.txt")));
 		System.out.println(FileUtils.getFileContent("/home/svilen/Desktop/fiile.config.xml"));
+		System.out.println(movieDAO.getMovies("Get Hard Kevin Hart Michael Hirst"));
 	}
 }

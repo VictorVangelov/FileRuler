@@ -56,4 +56,19 @@ public class FileUtils {
 	}
 	}
 	
+	public static void createFileByContent(String content, String filePath) {
+		try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+	              new FileOutputStream(filePath), "utf-8"))) {
+	   writer.write(content);
+	} catch (UnsupportedEncodingException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (FileNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	}
 }
