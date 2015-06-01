@@ -3,13 +3,15 @@ package fileruler.view;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.lucene.queryParser.ParseException;
+
+
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,13 +24,26 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+
+
+
+
+import org.apache.lucene.queryParser.ParseException;
+
+
+
+
 import fileruler.Main;
 import fileruler.apis.Lucene.LuceneTester;
 import fileruler.dao.DAOManager;
+import fileruler.dao.FileDAO;
+import fileruler.dao.ImageDAO;
 import fileruler.dao.SongDAO;
 import fileruler.model.Movie;
 import fileruler.model.Song;
-import fileruler.utils.MovieUtils;
+import fileruler.utils.FileUtils;
+import fileruler.utils.MovieUtils;import fileruler.utils.VoiceRecognitionUtils;
+
 
 public class BaseController {
     private DAOManager<Movie> managerDAO = new DAOManager<>();
@@ -36,6 +51,9 @@ public class BaseController {
     private final String luceneURLImagesIndexDir = "rsc/lucene/images/indexDIR";
     private final String luceneURLImages = "rsc/lucene/images";
     private final String luceneURLTextsIndexDIR = "rsc/lucene/texts/indexDIR";
+    private final String luceneImagesImagga = "D:\\FileRulersearch\\images";
+
+    private final String luceneURLITextsDIR = "rsc/lucene/texts/";
     private final String luceneURLITexts = "D:\\FileRulersearch";
     @FXML
     private Label releaseDateLabel;
@@ -55,6 +73,10 @@ public class BaseController {
     private Label country;
     @FXML
     private GridPane gridDetails;
+    private Thread listenerSpeaker;
+    private int numberLIstening = 0;
+    @FXML
+    private Button listenBtn;
     @FXML
     private GridPane gridSearchDetails;
 
@@ -262,6 +284,34 @@ public class BaseController {
 
     }
 
+    private <T> void addTextsToScene(String URL, String labelText, double x, double y, T imageSource) {
+        ImageViewCustom<T> imageView = new ImageViewCustom<>(imageSource);
+        File file = new File(URL);
+        Image image = new Image(file.toURI().toString(), 78, 79, false, false);
+        imageView.setImage(image);
+        imageView.setX(x);
+        imageView.setY(y);
+        imageView.setVisible(true);
+        Label lblItem = new Label("");
+        lblItem.setText(((FileDAO) imageSource).getFileName());
+        lblItem.setLayoutX(x + 10);
+        lblItem.setLayoutY(100 + y);
+        lblItem.setVisible(true);
+        imagePane.getChildren().add(imageView);
+        imagePane.getChildren().add(lblItem);
+        imageView.setOnMouseClicked(event -> {
+            //showElement(songGridDetails);
+            hideAllElements(gridSearchDetails, gridDetails, songGridSearchDetails,songGridDetails);
+            try {
+                Desktop.getDesktop().open(new File(((FileDAO) imageSource).getFilePath()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        });
+        imagesDynamicallyCreated.put(imageView, lblItem);
+    }
+
     private <T> void addSongsToScene(String URL, String labelText, double x, double y, T imageSource) {
         ImageViewCustom<T> imageView = new ImageViewCustom<>(imageSource);
         File file = new File(URL);
@@ -282,18 +332,16 @@ public class BaseController {
             showElement(songGridDetails);
             showSongsDetails((Song) imageView.getMovieSource());
         });
-        imageView
-                .setOnMouseClicked(event -> {
-                    showElement(songGridDetails);
-                    hideAllElements(gridSearchDetails, gridDetails, songGridSearchDetails);
-                    try {
-                        Desktop.getDesktop()
-                                .open(new File(((Song)imageSource).getFilePath()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+        imageView.setOnMouseClicked(event -> {
+            showElement(songGridDetails);
+            hideAllElements(gridSearchDetails, gridDetails, songGridSearchDetails);
+            try {
+                Desktop.getDesktop().open(new File(((Song) imageSource).getFilePath()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-                });
+        });
         imageView.setOnMouseExited(event -> {
             showElement(songGridSearchDetails);
             hideAllElements(gridDetails, songGridDetails, gridSearchDetails);
@@ -341,9 +389,40 @@ public class BaseController {
 
         imagesDynamicallyCreated.put(imageView, lblItem);
     }
+ 
+    private <T> void addImagesToScene(String URL, String labelText, double x, double y, T imageSource){
+        ImageViewCustom<T> imageView = new ImageViewCustom<>(imageSource);
+        File file = new File(URL);
+        Image image = new Image(file.toURI().toString(), 78, 79, false, false);
+        imageView.setImage(image);
+        imageView.setX(x);
+        imageView.setY(y);
+        imageView.setVisible(true);
+        Label lblItem = new Label("");
+        lblItem.setText(((ImageDAO) imageSource).getName());
+        lblItem.setLayoutX(x + 10);
+        lblItem.setLayoutY(100 + y);
+        lblItem.setVisible(true);
+        imagePane.getChildren().add(imageView);
+        imagePane.getChildren().add(lblItem);
+        imageView.setOnMouseClicked(event -> {
+            //showElement(songGridDetails);
+            hideAllElements(gridSearchDetails, gridDetails, songGridSearchDetails,songGridDetails);
+            try {
+                Desktop.getDesktop().open(new File(((ImageDAO) imageSource).getPath()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
+        });
+        imagesDynamicallyCreated.put(imageView, lblItem);
+    }
+    
     private void findMovies(String value) {
         initDynamicImgLocations();
+        if (value.contains("vin")) {
+            value = "diesel";
+        }
         ObservableList<Movie> movies = FXCollections.observableArrayList();
         List<Movie> existingMovie = (List<Movie>) managerDAO.selectSpecificRecords(value);
         if (!existingMovie.isEmpty()) {
@@ -353,7 +432,7 @@ public class BaseController {
                         startPositionImageY, movie);
                 startPositionImageX += 100;
                 if (startPositionImageX >= paneMaxImagesCount) {
-                    startPositionImageX = 14;
+                    startPositionImageX = 20;
                     startPositionImageY += 120;
                 }
             }
@@ -366,7 +445,7 @@ public class BaseController {
                         startPositionImageY, movie);
                 startPositionImageX += 100;
                 if (startPositionImageX >= paneMaxImagesCount) {
-                    startPositionImageX = 14;
+                    startPositionImageX = 20;
                     startPositionImageY += 120;
                 }
             }
@@ -400,12 +479,13 @@ public class BaseController {
                 findMovies(value);
             }
                 break;
-            case "Texts":
-            {
+            case "Texts": {
                 findTexts(value);
             }
                 break;
-            case "Images":
+            case "Images":{
+                findImages(value);
+            }
                 break;
             case "Songs": {
                 findSong(value);
@@ -417,12 +497,56 @@ public class BaseController {
 
     }
 
+    private void findImages(String value) {
+        initDynamicImgLocations();
+        LuceneTester lucene = new LuceneTester(luceneURLImagesIndexDir, luceneImagesImagga);
+        List<ImageDAO> allFiles = new ArrayList<>();
+        try {
+            lucene.createIndex();
+            LinkedList<String> urlsFound = lucene.search(value);
+            for (String image : urlsFound) {
+               String n =  new File(image).getName().toString();
+                String imageName = new File(image).getName().substring(0, n.indexOf('.'))+".jpg";
+                ImageDAO im = new ImageDAO(imageName, posterURL+imageName);
+                allFiles.add(im);
+            }
+            for (ImageDAO img : allFiles) {
+                addImagesToScene(img.getPath(), value, startPositionImageX, startPositionImageY, img);
+                startPositionImageX += 100;
+                if (startPositionImageX >= paneMaxImagesCount) {
+                    startPositionImageX = 20;
+                    startPositionImageY += 120;
+                }
+            }
+        } catch (IOException | ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
     private void findTexts(String value) {
         initDynamicImgLocations();
         LuceneTester luceneGOD = new LuceneTester(luceneURLTextsIndexDIR, luceneURLITexts);
+        List<FileDAO> allFiles = new ArrayList<>();
         try {
             luceneGOD.createIndex();
             LinkedList<String> urlsFound = luceneGOD.search(value);
+            for (String url : urlsFound) {
+                String fileName = FileUtils.getFileName(url);
+                FileDAO f = new FileDAO(fileName, url);
+                String encodedURL = FileUtils.encode(url);
+                FileUtils.copyFromTo(url, luceneURLITextsDIR + encodedURL);
+                allFiles.add(f);
+            }
+            for (FileDAO file : allFiles) {
+                addTextsToScene(posterURL+"text.png", file.getFileName(), startPositionImageX, startPositionImageY, file);
+                startPositionImageX += 100;
+                if (startPositionImageX >= paneMaxImagesCount) {
+                    startPositionImageX = 20;
+                    startPositionImageY+= 120;
+                }
+            }
+
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
@@ -433,8 +557,9 @@ public class BaseController {
         ObservableList<Song> songs = FXCollections.observableArrayList();
         SongDAO sDAO = new SongDAO(managerDAO.getManager());
         // Need fixes...
-         Song searchSong = sDAO.findSongByTitle(value);
-        //Song searchSong = new Song("Test", "Test", "Test", "Test", "Test", "Test");
+        Song searchSong = sDAO.findSongByTitle(value);
+        // Song searchSong = new Song("Test", "Test", "Test", "Test", "Test",
+        // "Test");
         if (searchSong != null) {
             addSongsToScene(posterURL + searchSong.getTitle() + ".jpg", searchSong.getTitle(), startPositionImageX,
                     startPositionImageY, searchSong);
@@ -461,6 +586,7 @@ public class BaseController {
     private void textOnKeyPressed() {
 
     }
+
     @FXML
     private void textBoxOnMouseClicked() {
         switch (this.searchType) {
@@ -488,6 +614,32 @@ public class BaseController {
         for (Entry<ImageViewCustom, Label> entryImage : this.imagesDynamicallyCreated.entrySet()) {
             entryImage.getKey().setVisible(false);
             entryImage.getValue().setVisible(false);
+        }
+    }
+
+    @FXML
+    private void buttonOnMouseClicked(){
+        numberLIstening++;
+        if (numberLIstening % 2 != 0) {
+            listenerSpeaker = new Thread(() -> {
+                String result = VoiceRecognitionUtils.record();
+                this.textSearch.setText(result);
+            });
+            listenerSpeaker.start();
+        }
+        else{
+            numberLIstening = 0;
+            if (listenerSpeaker != null) {
+                this.listenerSpeaker.stop();
+            }
+        }
+        
+    }
+    
+    @FXML 
+    private void buttonOnMouseReleased(){
+        if (listenerSpeaker != null) {
+            listenerSpeaker.stop();
         }
     }
 

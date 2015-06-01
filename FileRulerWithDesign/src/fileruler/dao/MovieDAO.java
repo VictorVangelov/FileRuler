@@ -1,5 +1,6 @@
 package fileruler.dao;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,14 +35,67 @@ public class MovieDAO {
 
     public List<Movie> getAllMoviesByActor(String actor) {
 
-        return em.createQuery("SELECT m FROM Movie m WHERE m.actors LIKE '%" + actor + "%'", Movie.class)
-                .getResultList();
+        try {
+        	return em.createQuery("SELECT m FROM Movie m WHERE m.actors LIKE '%" + actor + "%'", Movie.class)
+        	.getResultList();
+        } catch (Exception e) {
+        	return null;
+        }
+                
     }
 
     public List<Movie> getMoviesByTitle(String title) {
 
-        return em.createQuery("SELECT m FROM Movie m WHERE m.title LIKE '%" + title + "%'", Movie.class)
-                .getResultList();
+    	try {
+    		return em.createQuery("SELECT m FROM Movie m WHERE m.title LIKE '%" + title + "%'", Movie.class)
+                    .getResultList();
+    		} catch(Exception e) {
+    			return null;
+    		}
+        
+    }
+    
+    public List<Movie> getMoviesByYear(String year) {
+    	
+    	try {
+    		return em.createQuery("SELECT m FROM Movie m WHERE m.year LIKE '%" + year + "%'", Movie.class)
+                    .getResultList();
+    		} catch(Exception e) {
+    			return null;
+    		}
+    }
+    
+    public List<Movie> getMoviesByDirectorWriter(String actorDirector) {
+    	
+    	try {
+    		return em.createQuery("SELECT m FROM Movie m WHERE m.directors LIKE '%" + actorDirector + "%' OR m.writers LIKE '%" + actorDirector + "%'", Movie.class)
+                    .getResultList();
+    		} catch(Exception e) {
+    			return null;
+    		}
+    }
+    public List<Movie> getMovies(String search) {
+    	
+    	
+    	String[] split = search.split(" ");
+    	Set<Movie> result = new HashSet<Movie>();
+    	for (String string : split) {
+			
+    		if(getAllMoviesByActor(string) != null) {
+        		result.addAll(getAllMoviesByActor(string));
+        	} 
+        	if(getMoviesByTitle(string) != null) {
+        		result.addAll(getMoviesByTitle(string));
+        	}
+        	if(getMoviesByYear(string) != null) {
+        		result.addAll(getMoviesByYear(string));
+        	}
+        	if(getMoviesByDirectorWriter(string) != null) {
+        		result.addAll(getMoviesByDirectorWriter(string));
+        	}
+		}
+    	
+    	return new ArrayList<Movie>(result);
     }
     
     public Set<String> getAllActors() {

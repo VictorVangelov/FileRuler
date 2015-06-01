@@ -35,6 +35,10 @@ public class FileUtils {
 		return content;
 	}
 	
+	public static String getFileName(String filePath){
+	    return new File(filePath).getName();
+	}
+	
 	public static void copyFromTo(String from, String to) {
 		
 		try (Writer writer = new BufferedWriter(new OutputStreamWriter(

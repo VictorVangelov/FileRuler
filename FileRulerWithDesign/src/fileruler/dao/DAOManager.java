@@ -46,7 +46,7 @@ public class DAOManager<T> implements DAOManagerInterface<T> {
     @Override
     public List<? extends T> selectSpecificRecords(String whereClause){
        
-       return (List<? extends T>) movieDAO.getMoviesByTitle(whereClause);
+       return (List<? extends T>) movieDAO.getMovies(whereClause);
     }
     
     @Override

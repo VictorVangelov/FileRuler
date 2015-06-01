@@ -9,5 +9,9 @@
 	<classpathentry kind="lib" path="lib/sqlite-jdbc-3.8.10.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Belezirev/Desktop/Libs/commons-io-2.4/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Belezirev/Downloads/lucene-core-3.6.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Belezirev/Desktop/lib/jsapi.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Belezirev/Desktop/lib/sphinx4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Belezirev/Desktop/lib/TIDIGITS_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Belezirev/Desktop/lib/WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
